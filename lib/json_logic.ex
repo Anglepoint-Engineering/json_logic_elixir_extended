@@ -780,7 +780,6 @@ defmodule JsonLogicXL do
   defp parse_bool(value) when is_binary(value) do
     case String.downcase(value) do
       "false" -> false
-      "f" -> false
       "0" -> false
       "" -> false
       _ -> true

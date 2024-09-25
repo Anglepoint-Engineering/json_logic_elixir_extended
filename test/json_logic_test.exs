@@ -339,10 +339,13 @@ defmodule JsonLogicXLTest do
       assert JsonLogicXL.resolve(%{"if" => [[1, 2, 3, 4], "apple", "banana"]}) == "apple"
     end
 
-    test "empty strings are falsey, all other strings are truthy" do
+    test "empty strings, 0, and false are falsey, all other strings are truthy" do
       assert JsonLogicXL.resolve(%{"if" => ["", "apple", "banana"]}) == "banana"
       assert JsonLogicXL.resolve(%{"if" => ["zucchini", "apple", "banana"]}) == "apple"
-      assert JsonLogicXL.resolve(%{"if" => ["0", "apple", "banana"]}) == "apple"
+      assert JsonLogicXL.resolve(%{"if" => ["blue", "apple", "banana"]}) == "apple"
+      assert JsonLogicXL.resolve(%{"if" => ["0", "apple", "banana"]}) == "banana"
+      assert JsonLogicXL.resolve(%{"if" => ["FalsE", "apple", "banana"]}) == "banana"
+      assert JsonLogicXL.resolve(%{"if" => ["Flaky", "apple", "banana"]}) == "apple"
     end
 
     test "you can cast a string to numeric with a unary + " do
