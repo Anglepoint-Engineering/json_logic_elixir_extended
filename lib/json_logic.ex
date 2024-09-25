@@ -367,6 +367,9 @@ defmodule JsonLogicXL do
       resolved when resolved in @falsey ->
         nil
 
+      resolved when is_binary(resolved) ->
+        operation("if", [parse_bool(resolved), yes], data)
+
       _resolved ->
         resolve(yes, data)
     end
@@ -376,6 +379,9 @@ defmodule JsonLogicXL do
     case resolve(condition, data) do
       resolved when resolved in @falsey ->
         resolve(no, data)
+
+      resolved when is_binary(resolved) ->
+        operation("if", [parse_bool(resolved), yes, no], data)
 
       _resolved ->
         resolve(yes, data)
@@ -767,6 +773,17 @@ defmodule JsonLogicXL do
           _ ->
             :error
         end
+    end
+  end
+
+  defp parse_bool(nil), do: false
+  defp parse_bool(value) when is_binary(value) do
+    case String.downcase(value) do
+      "false" -> false
+      "f" -> false
+      "0" -> false
+      "" -> false
+      _ -> true
     end
   end
 
