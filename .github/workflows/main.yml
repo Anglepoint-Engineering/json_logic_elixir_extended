@@ -3,10 +3,15 @@ name: Main
 on:
   push:
     branches:
-      - "*"
+      - master
   pull_request:
+    types: [opened, synchronize, reopened, edited]
     branches:
       - "*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   lint:
